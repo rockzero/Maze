@@ -18,52 +18,8 @@ class Meiro
 
     man_x = start_x
     man_y = start_y
-
-    block = @blocks[man_x][man_y]
-    # 上を見る
-    if block.down
-    end
-
-    # 右を見る
-    if block.right
-      # 隣に部屋がある？
-      if man_x != 2
-        neighbor = @blocks[man_x + 1][man_y]
-        if rand(2) == 1
-          block.right = false
-          neighbor.left = false
-        end
-      end
-    end
-
-    # 左を見る
-    if block.left
-      # 隣に部屋がある？
-      if man_x != 0
-        neighbor = @blocks[man_x - 1][man_y]
-        if rand(2) == 1
-          block.left = false
-          neighbor.right = false
-        end
-      end
-    end
-
-    # 下を見る
-    if block.down
-      if man_y != 2
-        neighbor = @blocks[man_x][man_y + 1]
-        if block.right == true && block.left == true
-          block.down = false
-        else
-          if rand(2) == 1
-            block.down = false
-          end
-        end
-        if !block.down
-          neighbor.up = false
-        end
-      end
-    end
+    
+    generate_1(man_x, man_y)
 
 =begin
     @blocks[0][0].down = false
@@ -83,6 +39,58 @@ class Meiro
     @blocks[2][0].left = false
     @blocks[1][0].right = false 
 =end
+  end
+
+  def generate_1(man_x, man_y)
+    block = @blocks[man_x][man_y]
+
+    # 上を見る
+    if block.down
+    end
+
+    # 右を見る
+    if block.right
+      # 隣に部屋がある？
+      if man_x != 2
+        neighbor = @blocks[man_x + 1][man_y]
+        if rand(2) == 1
+          block.right = false
+          neighbor.left = false
+          generate_1(man_x + 1, man_y)
+        end
+      end
+    end
+
+    # 左を見る
+    if block.left
+      # 隣に部屋がある？
+      if man_x != 0
+        neighbor = @blocks[man_x - 1][man_y]
+        if rand(2) == 1
+          block.left = false
+          neighbor.right = false
+          generate_1(man_x - 1, man_y)
+        end
+      end
+    end
+
+    # 下を見る
+    if block.down
+      if man_y != 2
+        neighbor = @blocks[man_x][man_y + 1]
+        if block.right == true && block.left == true
+          block.down = false
+        else
+          if rand(2) == 1
+            block.down = false
+          end
+        end
+        if !block.down
+          neighbor.up = false
+          generate_1(man_x, man_y + 1)
+        end
+      end
+    end
   end
 
   def show
