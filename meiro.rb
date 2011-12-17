@@ -9,8 +9,63 @@ class Meiro
     @blocks = Array.new(X) { Array.new(Y) { Block.new } }
   end
 
-  def generate
-    @blocks[0][0].up = false
+  # 迷路を作る
+  def generate(start_x = 0, start_y = 0, goal_x = 2, goal_y = 2)
+    # スタートを開ける
+    @blocks[start_x][start_y].up = false
+    #ゴールを開ける
+    @blocks[goal_x][goal_y].down = false
+
+    man_x = start_x
+    man_y = start_y
+
+    block = @blocks[man_x][man_y]
+    # 上を見る
+    if block.down
+    end
+
+    # 右を見る
+    if block.right
+      # 隣に部屋がある？
+      if man_x != 2
+        neighbor = @blocks[man_x + 1][man_y]
+        if rand(2) == 1
+          block.right = false
+          neighbor.left = false
+        end
+      end
+    end
+
+    # 左を見る
+    if block.left
+      # 隣に部屋がある？
+      if man_x != 0
+        neighbor = @blocks[man_x - 1][man_y]
+        if rand(2) == 1
+          block.left = false
+          neighbor.right = false
+        end
+      end
+    end
+
+    # 下を見る
+    if block.down
+      if man_y != 2
+        neighbor = @blocks[man_x][man_y + 1]
+        if block.right == true && block.left == true
+          block.down = false
+        else
+          if rand(2) == 1
+            block.down = false
+          end
+        end
+        if !block.down
+          neighbor.up = false
+        end
+      end
+    end
+
+=begin
     @blocks[0][0].down = false
     @blocks[0][1].up = false
     @blocks[0][1].right = false
@@ -18,7 +73,6 @@ class Meiro
     @blocks[1][1].right = false
     @blocks[2][1].down = false
     @blocks[2][1].left = false
-    @blocks[2][2].down = false
     @blocks[2][2].up = false
     @blocks[0][1].down = false
     @blocks[0][2].up = false
@@ -28,6 +82,7 @@ class Meiro
     @blocks[2][0].down = false
     @blocks[2][0].left = false
     @blocks[1][0].right = false 
+=end
   end
 
   def show
@@ -96,5 +151,5 @@ class Block
 end
 
 meiro = Meiro.new
-meiro.generate
+meiro.generate(rand(3), 0, rand(3), 2)
 meiro.show
