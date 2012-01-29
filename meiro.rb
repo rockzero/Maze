@@ -21,116 +21,199 @@ class Meiro
     
     generate_1(man_x, man_y)
 
-=begin
-    @blocks[0][0].down = false
-    @blocks[0][1].up = false
-    @blocks[0][1].right = false
-    @blocks[1][1].left = false
-    @blocks[1][1].right = false
-    @blocks[2][1].down = false
-    @blocks[2][1].left = false
-    @blocks[2][2].up = false
-    @blocks[0][1].down = false
-    @blocks[0][2].up = false
-    @blocks[0][2].right = false
-    @blocks[1][2].left = false
-    @blocks[2][1].up = false
-    @blocks[2][0].down = false
-    @blocks[2][0].left = false
-    @blocks[1][0].right = false 
-=end
   end
 
   def generate_1(man_x, man_y)
     block = @blocks[man_x][man_y]
 
     # 上を見る
-    if block.down
+    if block.up
+      akeru = false
+      if man_y != 0
+        if rand(2) == 1
+          akeru = true
+        end
+        neighbor = @blocks[man_x][man_y - 1]
+        if neighbor.up == true && neighbor.down == true && neighbor.right == true && neighbor.left == true
+          akeru = true
+        end
+      end
+      if akeru
+        # 4つを開けるならばakeruをfalseにする
+        neighbor = @blocks[man_x][man_y - 1]
+        if man_x != 0 && !block.left
+          neighbor_left = @blocks[man_x - 1][man_y - 1]
+          if !neighbor_left.right && !neighbor_left.down
+            akeru = false
+          end
+        end
+        if man_x != 2 && !block.right
+          neighbor_right = @blocks[man_x + 1][man_y - 1]
+          if !neighbor_right.left && !neighbor_right.down
+            akeru = false
+          end
+        end
+      end
+      if akeru
+        neighbor = @blocks[man_x][man_y - 1]
+        block.up = false
+        neighbor.down = false
+        generate_1(man_x, man_y - 1)
+      end
     end
 
     # 右を見る
     if block.right
-      # 隣に部屋がある？
+      akeru = false
       if man_x != 2
-        neighbor = @blocks[man_x + 1][man_y]
         if rand(2) == 1
-          block.right = false
-          neighbor.left = false
-          generate_1(man_x + 1, man_y)
+          akeru = true
         end
+        neighbor = @blocks[man_x + 1][man_y]
+        if neighbor.up == true && neighbor.down == true && neighbor.right == true && neighbor.left == true
+          akeru = true
+        end
+      end
+      if akeru
+        # 4つを開けるならばakeruをfalseにする
+        neighbor = @blocks[man_x + 1][man_y]
+        if man_y != 0 && !block.up
+          neighbor_up = @blocks[man_x + 1][man_y - 1]
+          if !neighbor_up.down && !neighbor_up.left
+            akeru = false
+          end
+        end
+        if man_y != 2 && !block.down
+          neighbor_down = @blocks[man_x + 1][man_y + 1]
+          if !neighbor_down.up && !neighbor_down.left
+            akeru = false
+          end
+        end
+      end
+      if akeru
+        neighbor = @blocks[man_x + 1][man_y]
+        block.right = false
+        neighbor.left = false
+        generate_1(man_x + 1, man_y)
       end
     end
 
     # 左を見る
     if block.left
-      # 隣に部屋がある？
+      akeru = false
       if man_x != 0
-        neighbor = @blocks[man_x - 1][man_y]
         if rand(2) == 1
-          block.left = false
-          neighbor.right = false
-          generate_1(man_x - 1, man_y)
+          akeru = true
         end
+        neighbor = @blocks[man_x - 1][man_y]
+        if neighbor.up == true && neighbor.down == true && neighbor.right == true && neighbor.left == true
+          akeru = true
+        end
+      end
+      if akeru
+        # 4つを開けるならばakeruをfalseにする
+        neighbor = @blocks[man_x - 1][man_y]
+        if man_y != 0 && !block.up
+          neighbor_up = @blocks[man_x - 1][man_y - 1]
+          if !neighbor_up.down && !neighbor_up.right
+            akeru = false
+          end
+        end
+        if man_y != 0 && !block.down
+          neighbor_down = @blocks[man_x - 1][man_y + 1]
+          if !neighbor_down.up && !neighbor_down.right
+            akeru = false
+          end
+        end
+      end
+      if akeru
+        neighbor = @blocks[man_x - 1][man_y]
+        block.left = false
+        neighbor.right = false
+        generate_1(man_x - 1, man_y)
       end
     end
 
+
     # 下を見る
     if block.down
+      akeru = false
       if man_y != 2
+        if rand(2) == 1
+          akeru = true
+        end
         neighbor = @blocks[man_x][man_y + 1]
-        if block.right == true && block.left == true
-          block.down = false
-        else
-          if rand(2) == 1
-            block.down = false
+        if neighbor.up == true && neighbor.down == true && neighbor.right == true && neighbor.left == true
+          akeru = true
+        end
+        if @blocks[man_x][man_y].up && @blocks[man_x][man_y].right && @blocks[man_x][man_y].left
+          akeru = true
+      end
+      if akeru
+        # 4つを開けるならばakeruをfalseにする
+        neighbor = @blocks[man_x][man_y + 1]
+        if man_x != 0 && !block.left
+          neighbor_left = @blocks[man_x - 1][man_y + 1]
+          if !neighbor_left.up && !neighbor_left.right
+            akeru = false
           end
         end
-        if !block.down
-          neighbor.up = false
-          generate_1(man_x, man_y + 1)
+        if man_x != 2 && !block.right
+          neighbor_right = @blocks[man_x + 1][man_y + 1]
+          if !neighbor_right.up && !neighbor_right.left
+            akeru = false
+          end
         end
       end
+      if akeru
+        neighbor = @blocks[man_x][man_y + 1]
+        block.down = false
+        neighbor.up = false
+        generate_1(man_x, man_y + 1)
+      end
     end
+  end
   end
 
   def show
     Y.times do |y|
       X.times do |x|
         block = @blocks[x][y]
-        print "+"
+        print "＋"
         if block.up
-          print "-"
+          print "ー"
         else
-            print " "
+            print "　"
         end
-        print "+"
+        print "＋"
       end
       print "\n"
       X.times do |x|
         block = @blocks[x][y]
         if block.left
-          print "|"
+          print "｜"
         else
-          print " "
+          print "　"
         end
-        print " "
+        print "　"
         if block.right
-          print "|"
+          print "｜"
         else
-          print " "
+          print "　"
         end
       end
       print "\n"
       X.times do |x|
         block = @blocks[x][y]
-        print "+"
+        print "＋"
         if block.down
-          print "-"
+          print "ー"
         else
-            print " "
+            print "　"
         end
-        print "+"
+        print "＋"
       end
+
       print "\n"
     end
   end
