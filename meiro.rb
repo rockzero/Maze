@@ -19,11 +19,11 @@ class Meiro
     man_x = start_x
     man_y = start_y
     
-    generate_1(man_x, man_y)
+    generate_1(man_x, man_y, start_x, start_y, goal_x, goal_y)
 
   end
 
-  def generate_1(man_x, man_y)
+  def generate_1(man_x, man_y, start_x, start_y, goal_x,goal_y)
     block = @blocks[man_x][man_y]
 
     # 上を見る
@@ -35,6 +35,9 @@ class Meiro
         end
         neighbor = @blocks[man_x][man_y - 1]
         if neighbor.up == true && neighbor.down == true && neighbor.right == true && neighbor.left == true
+          akeru = true
+        end
+        if neighbor.up == true && neighbor.right == true && neighbor.left == true && neighbor == @blocks[goal_x][goal_y]
           akeru = true
         end
       end
@@ -58,7 +61,7 @@ class Meiro
         neighbor = @blocks[man_x][man_y - 1]
         block.up = false
         neighbor.down = false
-        generate_1(man_x, man_y - 1)
+        generate_1(man_x, man_y - 1, start_x, start_y, goal_x,goal_y)
       end
     end
 
@@ -71,6 +74,9 @@ class Meiro
         end
         neighbor = @blocks[man_x + 1][man_y]
         if neighbor.up == true && neighbor.down == true && neighbor.right == true && neighbor.left == true
+          akeru = true
+        end
+        if neighbor.up == true && neighbor.right == true && neighbor.left == true && neighbor == @blocks[goal_x][goal_y]
           akeru = true
         end
       end
@@ -94,7 +100,7 @@ class Meiro
         neighbor = @blocks[man_x + 1][man_y]
         block.right = false
         neighbor.left = false
-        generate_1(man_x + 1, man_y)
+        generate_1(man_x + 1, man_y, start_x, start_y, goal_x,goal_y)
       end
     end
 
@@ -109,6 +115,9 @@ class Meiro
         if neighbor.up == true && neighbor.down == true && neighbor.right == true && neighbor.left == true
           akeru = true
         end
+        if neighbor.up == true && neighbor.right == true && neighbor.left == true && neighbor == @blocks[goal_x][goal_y]
+          akeru = true
+        end
       end
       if akeru
         # 4つを開けるならばakeruをfalseにする
@@ -119,8 +128,9 @@ class Meiro
             akeru = false
           end
         end
-        if man_y != 0 && !block.down
+        if man_y != 2 && !block.down
           neighbor_down = @blocks[man_x - 1][man_y + 1]
+#puts man_x,man_y
           if !neighbor_down.up && !neighbor_down.right
             akeru = false
           end
@@ -130,7 +140,7 @@ class Meiro
         neighbor = @blocks[man_x - 1][man_y]
         block.left = false
         neighbor.right = false
-        generate_1(man_x - 1, man_y)
+        generate_1(man_x - 1, man_y, start_x, start_y, goal_x,goal_y)
       end
     end
 
@@ -169,7 +179,7 @@ class Meiro
         neighbor = @blocks[man_x][man_y + 1]
         block.down = false
         neighbor.up = false
-        generate_1(man_x, man_y + 1)
+        generate_1(man_x, man_y + 1, start_x, start_y, goal_x,goal_y)
       end
     end
   end
