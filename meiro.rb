@@ -2,8 +2,8 @@
 class Meiro
   attr_accessor :blocks
 
-  X = ARGV[0].to_i
-  Y = ARGV[1].to_i
+  X = ARGV[1] ? ARGV[1].to_i : 3
+  Y = ARGV[0] ? ARGV[0].to_i : 3
 
   def initialize
     @blocks = Array.new(X) { Array.new(Y) { Block.new } }
