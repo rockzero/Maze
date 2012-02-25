@@ -2,15 +2,15 @@
 class Meiro
   attr_accessor :blocks
 
-  X = 3
-  Y = 3
+  X = ARGV[0].to_i
+  Y = ARGV[1].to_i
 
   def initialize
     @blocks = Array.new(X) { Array.new(Y) { Block.new } }
   end
 
   # 迷路を作る
-  def generate(start_x = 0, start_y = 0, goal_x = 2, goal_y = 2)
+  def generate(start_x = 0, start_y = 0, goal_x = X - 1 , goal_y = Y - 1)
     # スタートを開ける
     @blocks[start_x][start_y].up = false
     #ゴールを開ける
@@ -73,7 +73,7 @@ class Meiro
     # 右を見る
     if block.right
       akeru = false
-      if man_x != 2
+      if man_x != (X - 1)
         if rand(2) == 1
           akeru = true
         end
@@ -97,7 +97,7 @@ class Meiro
             akeru = false
           end
         end
-        if man_y != 2 && !block.down
+        if man_y != (Y - 1) && !block.down
           neighbor_down = @blocks[man_x + 1][man_y + 1]
           if !neighbor_down.up && !neighbor_down.left
             akeru = false
@@ -139,7 +139,7 @@ class Meiro
             akeru = false
           end
         end
-        if man_y != 2 && !block.down
+        if man_y != (Y - 1) && !block.down
           neighbor_down = @blocks[man_x - 1][man_y + 1]
 #puts man_x,man_y
           if !neighbor_down.up && !neighbor_down.right
@@ -159,7 +159,7 @@ class Meiro
     # 下を見る
     if block.down
       akeru = false
-      if man_y != 2
+      if man_y != (Y - 1)
         if rand(2) == 1
           akeru = true
         end
@@ -183,7 +183,7 @@ class Meiro
             akeru = false
           end
         end
-        if man_x != 2 && !block.right
+        if man_x != (X - 1) && !block.right
           neighbor_right = @blocks[man_x + 1][man_y + 1]
           if !neighbor_right.up && !neighbor_right.left
             akeru = false
@@ -270,5 +270,5 @@ class Block
 end
 
 meiro = Meiro.new
-meiro.generate(rand(3), 0, rand(3), 2)
+meiro.generate(rand(Meiro::X), 0, rand(Meiro::X), Meiro::Y - 1)
 meiro.show
