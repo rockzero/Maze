@@ -26,6 +26,8 @@ class Meiro
   def generate_1(man_x, man_y, start_x, start_y, goal_x,goal_y)
     block = @blocks[man_x][man_y]
 
+    block.looked = true
+
     # 上を見る
     if block.up
       akeru = false
@@ -39,6 +41,9 @@ class Meiro
         end
         if neighbor.up == true && neighbor.right == true && neighbor.left == true && neighbor == @blocks[goal_x][goal_y]
           akeru = true
+        end
+        if neighbor.looked
+          akeru = false
         end
       end
       if akeru
@@ -79,6 +84,9 @@ class Meiro
         if neighbor.up == true && neighbor.right == true && neighbor.left == true && neighbor == @blocks[goal_x][goal_y]
           akeru = true
         end
+        if neighbor.looked
+          akeru = false
+        end
       end
       if akeru
         # 4つを開けるならばakeruをfalseにする
@@ -118,6 +126,9 @@ class Meiro
         if neighbor.up == true && neighbor.right == true && neighbor.left == true && neighbor == @blocks[goal_x][goal_y]
           akeru = true
         end
+        if neighbor.looked
+          akeru = false
+        end 
       end
       if akeru
         # 4つを開けるならばakeruをfalseにする
@@ -158,6 +169,10 @@ class Meiro
         end
         if @blocks[man_x][man_y].up && @blocks[man_x][man_y].right && @blocks[man_x][man_y].left
           akeru = true
+        end
+        if neighbor.looked
+          akeru = false
+        end
       end
       if akeru
         # 4つを開けるならばakeruをfalseにする
@@ -182,7 +197,6 @@ class Meiro
         generate_1(man_x, man_y + 1, start_x, start_y, goal_x,goal_y)
       end
     end
-  end
   end
 
   def show
@@ -243,11 +257,15 @@ class Block
   # 右の壁
   attr_accessor :right
 
+  # 見たブロック
+  attr_accessor :looked
+
   def initialize
     @up = true
     @down = true
     @left = true
     @right = true
+    @looked = false
   end
 end
 
